@@ -7,14 +7,14 @@ public class Product {
     private String description;
     private Category category;
     private String image;
-    private List<ProductOption> productOptions;
+    private List<ProductOpt> productOpts;
 
-    public Product(String name, String description, Category category, String image, List<ProductOption> productOptions) {
+    public Product(String name, String description, Category category, String image, List<ProductOpt> productOpts) {
         this.name = name;
         this.description = description;
         this.category = category;
         this.image = image;
-        this.productOptions = productOptions;
+        this.productOpts = productOpts;
     }
 
     public String getName() {
@@ -45,11 +45,11 @@ public class Product {
         return "https://s-api.caucalamdev.io.vn/file/image/" + image;
     }
 
-    public List<ProductOption> getProductOptions() {
-        return productOptions;
+    public List<ProductOpt> getProductOpts() {
+        return productOpts;
     }
 
-    public void setProductOptions(List<ProductOption> productOptions) {
-        this.productOptions = productOptions;
+    public void setProductOptions(List<ProductOpt> productOpts) {
+        this.productOpts = productOpts;
     }
 }
