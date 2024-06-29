@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -13,12 +14,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.s_store.R;
 import com.example.s_store.databinding.FragmentProductsBinding;
-import com.example.s_store.products.model.Card;
-import com.example.s_store.products.ui.CardAdapter;
+import com.example.s_store.products.controller.CategoryController;
+import com.example.s_store.products.controller.ProductController;
+import com.example.s_store.products.model.Product;
+import com.example.s_store.products.model.Category;
+import com.example.s_store.products.network.ApiService;
+import com.example.s_store.products.network.RetrofitClient;
+import com.example.s_store.products.ui.ProductAdapter;
 import com.example.s_store.products.ui.CategoryAdapter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ProductsFragment extends Fragment {
@@ -30,23 +35,52 @@ public class ProductsFragment extends Fragment {
         binding = FragmentProductsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        RecyclerView categoryRecyclerView = binding.categoryRecyclerView;
-        RecyclerView cardRecyclerView = binding.cardRecyclerView;
-// Set layout managers
-        categoryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        cardRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        List<String> categories = Arrays.asList("Electronics", "Fashion", "Home & Garden", "Sports", "Toys");
+        // Initiate Retrofit service
+        ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
 
+        RecyclerView categoryRecyclerView = binding.categoryRecyclerView;
+        RecyclerView productRecyclerView = binding.productRecyclerView;
+        // Set layout managers
+        categoryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        productRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+
+        ArrayList<Category> categories = new ArrayList<>();
         CategoryAdapter categoryAdapter = new CategoryAdapter(categories);
         categoryRecyclerView.setAdapter(categoryAdapter);
 
-        List<Card> cards = new ArrayList<>();
-        cards.add(new Card("Laptop", "High performance laptop", 999.99, true, R.drawable.laptop));
-        cards.add(new Card("Smartphone", "Latest model smartphone", 799.99, false, R.drawable.smartphone));
-        // Add more cards as needed
+        // Fetch categories using CategoryFetcher
+        CategoryController.getAllCategories(new CategoryController.CategoryFetchListener() {
+            @Override
+            public void onCategoriesFetched(List<Category> responseData) {
+                // Update UI with categories
+                categories.clear();
+                categories.addAll(responseData);
+                categoryAdapter.notifyDataSetChanged();
+            }
 
-        CardAdapter cardAdapter = new CardAdapter(cards);
-        cardRecyclerView.setAdapter(cardAdapter);
+            @Override
+            public void onFetchFailed(String errorMessage) {
+                Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        List<Product> products = new ArrayList<>();
+        ProductAdapter productAdapter = new ProductAdapter(products);
+        productRecyclerView.setAdapter(productAdapter);
+
+        ProductController.getAllProducts(new ProductController.ProductFetchListener() {
+            @Override
+            public void onProductsFetched(List<Product> responseData) {
+                products.clear();
+                products.addAll(responseData);
+                productAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFetchFailed(String errorMessage) {
+                Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show();
+            }
+        });
 
         return root;
     }

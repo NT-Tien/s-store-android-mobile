@@ -14,10 +14,10 @@
         tools:listitem="@layout/item_category" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/cardRecyclerView"
+        android:id="@+id/productRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:listitem="@layout/item_card" />
+        tools:listitem="@layout/item_product" />
 
 </LinearLayout>
 
