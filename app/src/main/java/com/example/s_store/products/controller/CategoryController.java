@@ -1,31 +1,37 @@
 package com.example.s_store.products.controller;
 
-import com.example.s_store.products.model.Category;
-import com.example.s_store.products.model.GetAllCategoryResponse;
-import com.example.s_store.products.network.ApiService;
-import com.example.s_store.products.network.RetrofitClient;
+import com.example.s_store.common.models.CategoryModel;
+import com.example.s_store.di.api.CategoryApi;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+@Singleton
 public class CategoryController {
+    private final CategoryApi categoryApi;
+    @Inject
+    public CategoryController(CategoryApi categoryApi) {
+        this.categoryApi = categoryApi;
+    }
 
     public interface CategoryFetchListener {
-        void onCategoriesFetched(List<Category> categories);
+        void onCategoriesFetched(List<CategoryModel> categories);
         void onFetchFailed(String errorMessage);
     }
-    public static void getAllCategories(CategoryFetchListener listener) {
-        ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
-        Call<GetAllCategoryResponse> call = apiService.getAllCategories();
-        call.enqueue(new Callback<GetAllCategoryResponse>() {
+    public void getAllCategories(CategoryFetchListener listener) {
+        Call<List<CategoryModel>> call = categoryApi.all();
+        call.enqueue(new Callback<List<CategoryModel>>() {
             @Override
-            public void onResponse(Call<GetAllCategoryResponse> call, Response<GetAllCategoryResponse> response) {
+            public void onResponse(Call<List<CategoryModel>> call, Response<List<CategoryModel>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    List<Category> categories = response.body().getCategories();
+                    List<CategoryModel> categories = response.body();
                     listener.onCategoriesFetched(categories);
                 } else {
                     listener.onFetchFailed("Failed to fetch categories");
@@ -33,7 +39,7 @@ public class CategoryController {
             }
 
             @Override
-            public void onFailure(Call<GetAllCategoryResponse> call, Throwable t) {
+            public void onFailure(Call<List<CategoryModel>> call, Throwable t) {
                 listener.onFetchFailed("Network Error: " + t.getMessage());
             }
         });
