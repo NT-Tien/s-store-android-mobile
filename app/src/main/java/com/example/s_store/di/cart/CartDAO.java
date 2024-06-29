@@ -12,7 +12,7 @@ import java.util.List;
 
 @Dao
 public interface CartDAO {
-    @Query("SELECT * FROM Cart_Items")
+    @Query("SELECT * FROM Cart_Items ORDER BY createdAt ASC")
     List<CartItemEntity> all();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

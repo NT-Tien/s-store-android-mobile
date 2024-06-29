@@ -1,6 +1,7 @@
 package com.example.s_store.ui.cart;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.s_store.databinding.FragmentCartBinding;
 import com.example.s_store.di.cart.CartService;
+import com.example.s_store.ui.checkout.CheckoutActivity;
 
 import javax.inject.Inject;
 
@@ -53,6 +55,10 @@ public class CartFragment extends Fragment {
         this.binding.btnClear.setOnClickListener(v -> {
             this.cartViewModel.clearCart();
             Toast.makeText(this.activity, "Cart cleared", Toast.LENGTH_SHORT).show();
+        });
+        this.binding.btnCheckout.setOnClickListener(v -> {
+            Intent i = new Intent(this.activity, CheckoutActivity.class);
+            this.startActivity(i);
         });
         return this.binding.getRoot();
     }

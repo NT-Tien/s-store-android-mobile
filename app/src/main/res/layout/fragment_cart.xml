@@ -18,14 +18,14 @@
 
     <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
-            android:layout_height="664dp"
+            android:layout_height="589dp"
             android:layout_marginTop="1dp"
             android:id="@+id/cart_item_list"
             app:layout_constraintTop_toBottomOf="@+id/add_test_product_to_cart"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:paddingBottom="36dp"
-            android:paddingHorizontal="20dp"/>
+            android:paddingHorizontal="20dp" />
 
     <Button
             android:text="Clear All"
@@ -35,7 +35,16 @@
             app:layout_constraintStart_toEndOf="@+id/add_test_product_to_cart"
             android:layout_marginStart="4dp"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="16dp"
             app:layout_constraintHorizontal_bias="0.058" />
+
+    <Button
+            android:layout_width="382dp"
+            android:layout_height="58dp"
+            android:id="@+id/btn_checkout"
+            android:text="Checkout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="12dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

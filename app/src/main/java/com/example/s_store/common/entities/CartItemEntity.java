@@ -5,6 +5,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,4 +24,5 @@ public class CartItemEntity implements Serializable {
     private String name;
     private Integer quantity;
     private Integer price;
+    private Long createdAt = System.currentTimeMillis();
 }
