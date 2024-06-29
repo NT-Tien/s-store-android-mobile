@@ -1,6 +1,6 @@
 package com.example.s_store.products.model;
 
-public class ProductOption {
+public class ProductOpt {
     private String id;
     private String name;
     private long price;
@@ -39,7 +39,7 @@ public class ProductOption {
         this.image = image;
     }
 
-    public ProductOption(String name, long price, int quantity, String image) {
+    public ProductOpt(String name, long price, int quantity, String image) {
         this.name = name;
         this.price = price;
         this.quantity = quantity;
