@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.androidApplication)
 
     id("com.google.gms.google-services")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -75,4 +76,15 @@ dependencies {
     androidTestImplementation(libs.ui.test.junit4)
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
+
+//    Lombok
+    compileOnly(libs.lombok)
+    annotationProcessor(libs.lombok)
+//    Hilt
+    implementation(libs.hilt.android)
+    annotationProcessor(libs.hilt.compiler)
+//    Room Database
+    implementation(libs.room.runtime)
+    annotationProcessor(libs.room.compiler)
+
 }
