@@ -23,6 +23,8 @@
         android:id="@+id/productDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="2"
         android:text="Product Description"
         android:textSize="14sp" />
 

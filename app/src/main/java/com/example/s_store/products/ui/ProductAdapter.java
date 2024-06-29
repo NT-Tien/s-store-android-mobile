@@ -1,5 +1,7 @@
 package com.example.s_store.products.ui;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,10 +15,14 @@ import com.bumptech.glide.Glide;
 import com.example.s_store.R;
 import com.example.s_store.products.model.Product;
 
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
     private List<Product> products;
+    private Context context;
+
 
     public ProductAdapter(List<Product> products) {
         this.products = products;
@@ -34,9 +40,24 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         Product product = products.get(position);
         holder.name.setText(product.getName());
         holder.description.setText(product.getDescription());
+
+        NumberFormat numberFormat = NumberFormat.getInstance(Locale.US);
+        String formattedPrice = numberFormat.format(product.getProductOpts().get(0).getPrice()) + " VND";
+        holder.price.setText(formattedPrice);
         Glide.with(holder.itemView.getContext())
                 .load(product.getImage())
                 .into(holder.image);
+
+        // Set OnClickListener for productName to open ProductDetailActivity
+//        holder.name.setOnClickListener(v -> {
+//            Intent intent = new Intent(context, ProductDetailActivity.class);
+//            intent.putExtra("name", product.getName());
+//            intent.putExtra("description", product.getDescription());
+//            intent.putExtra("price", product.getPrice());
+//            intent.putExtra("status", product.getStatus());
+//            intent.putExtra("imageUrl", product.getImageUrl());
+//            context.startActivity(intent);
+//        });
     }
 
     @Override
