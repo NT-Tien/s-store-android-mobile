@@ -1,7 +1,6 @@
 package com.example.s_store.products.ui;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,18 +12,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.s_store.R;
-import com.example.s_store.products.model.Product;
+import com.example.s_store.common.models.ProductModel;
 
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
-    private List<Product> products;
+    private List<ProductModel> products;
     private Context context;
 
 
-    public ProductAdapter(List<Product> products) {
+    public ProductAdapter(List<ProductModel> products) {
         this.products = products;
     }
 
@@ -37,15 +36,17 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
-        Product product = products.get(position);
+        ProductModel product = products.get(position);
         holder.name.setText(product.getName());
         holder.description.setText(product.getDescription());
 
         NumberFormat numberFormat = NumberFormat.getInstance(Locale.US);
         String formattedPrice = numberFormat.format(product.getProductOpts().get(0).getPrice()) + " VND";
         holder.price.setText(formattedPrice);
+
+        String baseUrl = "https://s-api.caucalamdev.io.vn/file/image/";
         Glide.with(holder.itemView.getContext())
-                .load(product.getImage())
+                .load(baseUrl + product.getImage())
                 .into(holder.image);
 
         // Set OnClickListener for productName to open ProductDetailActivity

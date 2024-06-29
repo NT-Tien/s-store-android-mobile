@@ -5,6 +5,7 @@ import com.example.s_store.common.BaseModel;
 import java.io.Serializable;
 import java.util.List;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -32,4 +33,6 @@ public class ProductModel extends BaseModel implements Serializable {
 
         private final String status;
     }
+
+
 }
