@@ -26,4 +26,10 @@ public interface CartDAO {
 
     @Query("SELECT * FROM Cart_Items WHERE id = :id")
     CartItemEntity one(String id);
+
+    @Query("SELECT COUNT(*) FROM Cart_Items")
+    Integer count();
+
+    @Query("SELECT * FROM Cart_Items LIMIT 1 OFFSET :index")
+    CartItemEntity oneByIndex(Integer index);
 }

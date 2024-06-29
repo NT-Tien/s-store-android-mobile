@@ -7,12 +7,14 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import lombok.RequiredArgsConstructor;
-
-@RequiredArgsConstructor
 public class CartService {
+
+    private final AppDatabase db;
+
     @Inject
-    AppDatabase db;
+    public CartService(AppDatabase db) {
+        this.db = db;
+    }
 
     public void addProduct(CartItemEntity cartItemEntity) {
         db.cartDAO().insert(cartItemEntity);
@@ -32,5 +34,13 @@ public class CartService {
 
     public CartItemEntity getOne(String id) {
         return db.cartDAO().one(id);
+    }
+
+    public Integer count() {
+        return db.cartDAO().count();
+    }
+
+    public CartItemEntity get(Integer index) {
+        return db.cartDAO().oneByIndex(index);
     }
 }

@@ -6,17 +6,21 @@ import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Data
 @NoArgsConstructor
 @Entity(tableName = "Cart_Items")
+@SuperBuilder
 public class CartItemEntity implements Serializable {
     @PrimaryKey
     @NonNull
     public String id;
     private String name;
-    private String quantity;
+    private Integer quantity;
     private Integer price;
 }
