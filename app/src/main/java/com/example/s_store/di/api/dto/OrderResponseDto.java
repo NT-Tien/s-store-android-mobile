@@ -54,14 +54,58 @@ public class OrderResponseDto {
 
         @Getter
         public static class OrderData {
-            private Integer total;
-            private String phone;
-            private String address;
             private String email;
+            private String phone;
             private String username;
-            private String user;
-            private String voucher;
-            private List<CartItemEntity> items;
+            private String address;
+            private int total;
+            private Object voucher; // Could be String or null, based on your JSON
+            private List<Item> items;
+            private String status;
+            private Payment payment;
+
+            @Getter
+            public static class Item {
+                private String id;
+                private String image;
+                private String name;
+                private int price;
+                private String productName;
+                private int quantity;
+            }
+
+            @Getter
+            public static class Payment {
+                private PaymentDetails payment;
+                private PaymentInfo info;
+
+                @Getter
+                public static class PaymentDetails {
+                    private int return_code;
+                    private String return_message;
+                    private int sub_return_code;
+                    private String sub_return_message;
+                    private String zp_trans_token;
+                    private String order_url;
+                    private String order_token;
+                    private String qr_code;
+                }
+
+                @Getter
+                public static class PaymentInfo {
+                    private String app_id;
+                    private String app_trans_id;
+                    private String app_user;
+                    private long app_time;
+                    private String item;
+                    private String embed_data;
+                    private int amount;
+                    private String description;
+                    private String bank_code;
+                    private String mac;
+                    private String callback_url;
+                }
+            }
         }
     }
 }

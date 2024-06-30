@@ -68,11 +68,20 @@ public class ProductDetailViewModel extends ViewModel {
             totalPrice += option.getPrice();
         }
 
+//        CartItemEntity cartItemEntity = CartItemEntity.builder()
+//                .id(product.getId())
+//                .name(product.getName())
+//                .price(totalPrice)
+//                .quantity(selectedOptions.size())
+//                .build();
+
         CartItemEntity cartItemEntity = CartItemEntity.builder()
-                .id(product.getId())
-                .name(product.getName())
-                .price(totalPrice)
-                .quantity(selectedOptions.size())
+                .id(product.getProductOpts().get(0).getId())
+                .name(product.getProductOpts().get(0).getName())
+                .price(product.getProductOpts().get(0).getPrice())
+                .quantity(1)
+                .image(product.getProductOpts().get(0).getImage())
+                .productName(product.getName())
                 .build();
 
         new Thread(() -> {

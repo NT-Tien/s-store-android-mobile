@@ -20,11 +20,11 @@ import lombok.experimental.SuperBuilder;
 public class CartItemEntity implements Serializable {
     @PrimaryKey
     @NonNull
-    public String id;
-    private String name;
-    private Integer quantity;
-    private Double price;
-    private String image;
-    private String productName;
+    public String id; // id of optional product
+    private String name; // name of optional product
+    private Integer quantity; // quantity to add to cart
+    private Double price; // price of optional product
+    private String image; // image of optional product
+    private String productName; // name of product
     private Long createdAt = System.currentTimeMillis();
 }
