@@ -39,8 +39,6 @@ public class AppModule {
                         supportSQLiteDatabase.execSQL("ALTER TABLE cart_items ");
                     }
                 })
-                .fallbackToDestructiveMigration() // clear database when version is changed
-                .fallbackToDestructiveMigrationOnDowngrade() // clear database when version is downgraded
                 .build();
     }
 }

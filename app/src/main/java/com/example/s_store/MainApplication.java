@@ -10,9 +10,9 @@ import dagger.hilt.android.HiltAndroidApp;
 public class MainApplication extends Application {
     @Override
     public void onCreate() {
-        File databaseFile = getApplicationContext().getDatabasePath("app-main-db");
-        if (databaseFile.exists()) {
-            databaseFile.delete();
-        }
+//        File databaseFile = getApplicationContext().getDatabasePath("app-main-db");
+//        if (databaseFile.exists()) {
+//            databaseFile.delete();
+//        }
     }
 }
