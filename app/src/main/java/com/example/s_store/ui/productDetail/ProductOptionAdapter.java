@@ -24,8 +24,6 @@ public class ProductOptionAdapter extends RecyclerView.Adapter<ProductOptionAdap
     private List<ProductOptionalModel> productOpts;
     private int selectedPosition = RecyclerView.NO_POSITION; // Track selected position
 
-
-
     private SparseBooleanArray selectedItems; // To keep track of selected items
 
     public ProductOptionAdapter(List<ProductOptionalModel> productOpts) {
@@ -54,16 +52,6 @@ public class ProductOptionAdapter extends RecyclerView.Adapter<ProductOptionAdap
                 .load(imageUrl)
                 .into(holder.image);
 
-//        // Enable or disable the checkbox based on quantity
-//        holder.checkboxOpt.setEnabled(productOpt.getQuantity() != 0);
-//        holder.checkboxOpt.setChecked(selectedItems.get(position, false));
-//        holder.checkboxOpt.setOnCheckedChangeListener((buttonView, isChecked) -> {
-//            if (isChecked) {
-//                selectedItems.put(position, true);
-//            } else {
-//                selectedItems.delete(position);
-//            }
-//        });
         // Set the position as tag to identify the RadioButton clicked
         holder.radioOpt.setTag(position);
 

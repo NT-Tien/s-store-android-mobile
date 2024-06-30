@@ -57,6 +57,8 @@ public class ProductDetailViewModel extends ViewModel {
                 .id(option.getId())
                 .name(option.getName())
                 .price(option.getPrice())
+                .productName(product.getName())
+                .image(option.getImage())
                 .quantity(1)
                 .build();
 
