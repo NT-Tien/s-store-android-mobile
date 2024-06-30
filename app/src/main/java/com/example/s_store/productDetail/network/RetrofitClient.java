@@ -1,4 +1,4 @@
-package com.example.s_store.products.network;
+package com.example.s_store.productDetail.network;
 
 
 import retrofit2.Retrofit;

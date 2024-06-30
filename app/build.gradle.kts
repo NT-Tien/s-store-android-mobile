@@ -47,8 +47,8 @@ android {
 }
 
 dependencies {
-    implementation (libs.retrofit)
-    implementation (libs.converter.gson)
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.constraintlayout)
@@ -86,5 +86,8 @@ dependencies {
 //    Room Database
     implementation(libs.room.runtime)
     annotationProcessor(libs.room.compiler)
+
+//    UI
+    implementation("androidx.cardview:cardview:1.0.0")
 
 }

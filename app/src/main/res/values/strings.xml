@@ -14,4 +14,5 @@
     <string name="title_activity_sign_up">SignUp</string>
     <string name="web_client_id">51514213424-44stl8j3i7ntigqeaq3idsbnviigg1hl.apps.googleusercontent.com</string>
     <string name="menu_products">Products</string>
+    <string name="menu_order_history">Order History</string>
 </resources>

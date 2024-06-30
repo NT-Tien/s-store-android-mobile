@@ -37,4 +37,9 @@ public class ApiModule {
     public CategoryApi categoryApi() {
         return retrofit().create(CategoryApi.class);
     }
+
+    @Provides
+    public OrderApi orderApi() {
+        return retrofit().create(OrderApi.class);
+    }
 }

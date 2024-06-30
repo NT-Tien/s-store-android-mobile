@@ -32,4 +32,7 @@ public interface CartDAO {
 
     @Query("SELECT * FROM Cart_Items LIMIT 1 OFFSET :index")
     CartItemEntity oneByIndex(Integer index);
+
+    @Query("SELECT SUM(price) FROM Cart_Items")
+    Double total();
 }

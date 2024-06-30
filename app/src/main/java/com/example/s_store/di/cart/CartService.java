@@ -43,4 +43,8 @@ public class CartService {
     public CartItemEntity get(Integer index) {
         return db.cartDAO().oneByIndex(index);
     }
+
+    public Double total() {
+        return db.cartDAO().total();
+    }
 }

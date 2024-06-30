@@ -1,4 +1,4 @@
-package com.example.s_store.products.network;
+package com.example.s_store.productDetail.network;
 
 import com.example.s_store.products.model.GetAllCategoryResponse;
 import com.example.s_store.products.model.GetAllProductResponse;
