@@ -1,39 +1,46 @@
 package com.example.s_store.products.controller;
 
-import com.example.s_store.products.model.GetAllProductResponse;
-import com.example.s_store.products.model.Product;
-import com.example.s_store.products.network.ApiService;
-import com.example.s_store.products.network.RetrofitClient;
+import com.example.s_store.common.models.ProductModel;
+import com.example.s_store.di.api.ProductApi;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+@Singleton
 public class ProductController {
+    private final ProductApi productApi;
+
+    @Inject
+    public ProductController(ProductApi productApi) {
+        this.productApi = productApi;
+    }
 
     public interface ProductFetchListener {
-        void onProductsFetched(List<Product> products);
+        void onProductsFetched(List<ProductModel> products);
         void onFetchFailed(String errorMessage);
     }
-    public static void getAllProducts(ProductFetchListener listener) {
-        ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
-        Call<GetAllProductResponse> call = apiService.getAllProducts();
-        call.enqueue(new Callback<GetAllProductResponse>() {
+
+    public void getAllProducts(ProductFetchListener listener) {
+        Call<List<ProductModel>> call = productApi.all();
+        call.enqueue(new Callback<List<ProductModel>>() {
             @Override
-            public void onResponse(Call<GetAllProductResponse> call, Response<GetAllProductResponse> response) {
+            public void onResponse(Call<List<ProductModel>> call, Response<List<ProductModel>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    List<Product> products = response.body().getProducts();
+                    List<ProductModel> products = response.body();
                     listener.onProductsFetched(products);
                 } else {
-                    listener.onFetchFailed("Failed to fetch categories");
+                    listener.onFetchFailed("Failed to fetch products");
                 }
             }
 
             @Override
-            public void onFailure(Call<GetAllProductResponse> call, Throwable t) {
+            public void onFailure(Call<List<ProductModel>> call, Throwable t) {
                 listener.onFetchFailed("Network Error: " + t.getMessage());
             }
         });

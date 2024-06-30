@@ -8,16 +8,15 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.s_store.R;
-import com.example.s_store.products.model.Category;
+import com.example.s_store.common.models.CategoryModel;
 
 import java.util.List;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
-    private List<Category> categories;
+    private List<CategoryModel> categories;
 
-    public CategoryAdapter(List<Category> categories) {
+    public CategoryAdapter(List<CategoryModel> categories) {
         this.categories = categories;
     }
 
@@ -30,7 +29,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     @Override
     public void onBindViewHolder(@NonNull CategoryViewHolder holder, int position) {
-        Category category = categories.get(position);
+        CategoryModel category = categories.get(position);
         holder.bind(category);
     }
 
@@ -47,7 +46,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             categoryName = itemView.findViewById(R.id.categoryName);
         }
 
-        public void bind(Category category) {
+        public void bind(CategoryModel category) {
             categoryName.setText(category.getName());
         }
     }
