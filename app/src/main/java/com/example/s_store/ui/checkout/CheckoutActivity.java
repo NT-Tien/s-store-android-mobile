@@ -82,15 +82,15 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
 
 //        this.binding.btnCheckout.setEnabled(true);
 
-        OrderRequestDto.CreateOrder.CreateOrderBuilder dto = OrderRequestDto.CreateOrder.builder()
-                .user(uid)
-                .phone(phone.toString())
-                .email(email.toString())
-                .username(name.toString())
-                .address(addressLine + ", " + city + ", " + province)
-                .voucher(null);
 
         new Thread(() -> {
+            OrderRequestDto.CreateOrder.CreateOrderBuilder dto = OrderRequestDto.CreateOrder.builder()
+                    .user(uid)
+                    .phone(phone.toString())
+                    .email(email.toString())
+                    .username(name.toString())
+                    .address(addressLine + ", " + city + ", " + province)
+                    .voucher(null);
             List<CartItemEntity> items = this.cartService.getAll();
             dto.items(items);
             dto.total(items.stream().reduce(0d, (subtotal, item) -> subtotal + (item.getPrice() * item.getQuantity()), Double::sum));

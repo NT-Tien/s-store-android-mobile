@@ -22,6 +22,9 @@ public class ApiResponseInterceptor implements Interceptor {
         try (Response originalResponse = chain.proceed(chain.request()); ResponseBody body = originalResponse.body()) {
             if (body != null && body.contentType() != null && Objects.requireNonNull(body.contentType()).subtype().equalsIgnoreCase(("json"))) {
                 String bodyString = body.string();
+                if(bodyString.contains("\"error\":")) {
+                    return originalResponse;
+                }
                 ApiSuccessResponseModel<?> apiResponse = gson.fromJson(bodyString, new TypeToken<ApiSuccessResponseModel<?>>() {
                 }.getType());
                 return originalResponse.newBuilder()
@@ -30,7 +33,7 @@ public class ApiResponseInterceptor implements Interceptor {
             }
         } catch (NullPointerException | JsonSyntaxException e) {
             e.printStackTrace();
-            return null;
+            return chain.proceed(chain.request());
         }
         return chain.proceed(chain.request());
     }

@@ -4,6 +4,8 @@ import com.example.s_store.common.models.OrderModel;
 import com.example.s_store.di.api.OrderApi;
 import com.example.s_store.di.api.dto.OrderRequestDto;
 import com.example.s_store.di.api.dto.OrderResponseDto;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 
 import java.io.IOException;
 import java.util.List;
@@ -24,7 +26,7 @@ public class OrderService {
     }
 
     public void createOrder(OrderRequestDto.CreateOrder dto, String token) {
-        System.out.println("RESULT" + dto.toString());
+        System.out.println("RESULT" + dto.getAddress() + dto.getAddress() + dto.getPhone() + dto.getEmail() + dto.getUser() + dto.getItems() + dto.getUsername() + dto.getTotal());
         try {
             Call<OrderResponseDto.CreateOrder> createOrder = this.orderApi.createOrder("Bearer " + token, dto);
             // create order
@@ -33,16 +35,19 @@ public class OrderService {
                 throw new IOException("Failed to create order");
             }
             OrderResponseDto.CreateOrder body = v.body();
+
             if (body == null) {
                 throw new IOException("Failed to create order");
             }
-
-            Thread.sleep(3000);
 
             String orderId = body.getId();
             if (orderId == null) {
                 throw new IOException("Failed to create order");
             }
+
+            System.out.println("FIRST REQUEST DONE");
+
+            Thread.sleep(3000);
 
             // get order result
             Call<OrderResponseDto.GetResult> getOrderResult = this.orderApi.getOrderResult("Bearer " + token, orderId);
@@ -60,6 +65,17 @@ public class OrderService {
 
             if ((Object) body2.getReturnvalue() instanceof String) {
                 throw new IOException("Failed to get order result");
+            }
+
+            JsonElement returnvalue = body2.getReturnvalue();
+            if(returnvalue.isJsonObject()) {
+                System.out.println("RETURNVSALYUE");
+                System.out.println(returnvalue.getAsString());
+                OrderResponseDto.GetResult.OrderData value = new Gson().fromJson(returnvalue, OrderResponseDto.GetResult.OrderData.class);
+                System.out.println("ORDER SUCCESS: " + value.getUser());
+            } else if (returnvalue.isJsonPrimitive()) {
+                String value = returnvalue.getAsString();
+                System.out.println("ORDER FAILED: " + value);
             }
         } catch (IOException e) {
             e.printStackTrace();

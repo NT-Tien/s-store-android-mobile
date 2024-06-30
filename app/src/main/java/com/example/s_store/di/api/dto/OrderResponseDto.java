@@ -1,6 +1,7 @@
 package com.example.s_store.di.api.dto;
 
 import com.example.s_store.common.entities.CartItemEntity;
+import com.google.gson.JsonElement;
 
 import java.util.List;
 
@@ -11,29 +12,6 @@ public class OrderResponseDto {
     @Getter
     public static class CreateOrder {
         private String id;
-        private String name;
-        private Integer progress;
-        private Integer delay;
-        private Integer timestamp;
-        private Integer attemptsMade;
-        private OrderDataWrapper data;
-
-        @Getter
-        public static class OrderDataWrapper {
-            private OrderData order;
-        }
-
-        @Getter
-        public static class OrderData {
-            private Integer total;
-            private String phone;
-            private String address;
-            private String email;
-            private String username;
-            private String user;
-            private String voucher;
-            private List<CartItemEntity> items;
-        }
     }
 
     @Getter
@@ -44,12 +22,12 @@ public class OrderResponseDto {
         private OrderDataWrapper data;
         private Integer progress;
         private Integer delay;
-        private Integer timestamp;
+        private Long timestamp;
         private Integer attemptsMade;
-        private OrderReturnValue returnvalue;
+        private JsonElement returnvalue;
 
         @Getter
-        public static class OrderReturnValue {
+        public static class OrderReturnValueSuccess {
             private String email;
             private String phone;
             private String username;
@@ -71,7 +49,7 @@ public class OrderResponseDto {
 
         @Getter
         public static class OrderDataWrapper {
-            private CreateOrder.OrderData order;
+            private GetResult.OrderData order;
         }
 
         @Getter
