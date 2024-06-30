@@ -96,12 +96,10 @@ public class ProductDetailFragment extends Fragment {
         addToCartBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                List<Integer> selectedItems = productOptionAdapter.getSelectedItems();
-                // Do something with selectedItems
-                Toast.makeText(requireContext(), "Selected items: " + selectedItems.toString(),
-                        Toast.LENGTH_SHORT).show();
+//                List<Integer> selectedItems = productOptionAdapter.getSelectedItems();
+                int selectedPosition = productOptionAdapter.getSelectedPosition();
 
-                productDetailViewModel.addProduct(productModel, selectedItems);
+                productDetailViewModel.addProduct(productModel, selectedPosition);
             }
         });
 

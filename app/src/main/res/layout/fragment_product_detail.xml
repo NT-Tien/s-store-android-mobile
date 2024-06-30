@@ -37,21 +37,12 @@
             android:textStyle="bold"
             android:padding="8dp" />
 
-        <!-- Product Description -->
-        <TextView
-            android:id="@+id/productDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Product description"
-            android:textSize="16sp"
-            android:padding="8dp" />
-
         <!-- Options Section -->
         <TextView
             android:id="@+id/optionsLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Options"
+            android:text="Product Options"
             android:textSize="16sp"
             android:textStyle="bold"
             android:padding="8dp" />
@@ -73,6 +64,14 @@
             android:text="Add to Cart"
             android:layout_margin="16dp" />
 
+        <!-- Product Description -->
+        <TextView
+            android:id="@+id/productDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Product description"
+            android:textSize="16sp"
+            android:padding="8dp" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

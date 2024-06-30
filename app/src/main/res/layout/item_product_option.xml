@@ -49,7 +49,6 @@
                 android:layout_height="wrap_content"
                 android:text="Quantity left"
                 android:textSize="14sp"/>
-
         </LinearLayout>
 
         <!-- Product Image -->
@@ -66,8 +65,8 @@
             app:layout_constraintEnd_toEndOf="parent"/>
 
         <!-- Checkbox for Selection (Right Side) -->
-        <CheckBox
-            android:id="@+id/checkboxOpt"
+        <RadioButton
+            android:id="@+id/radioOpt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"

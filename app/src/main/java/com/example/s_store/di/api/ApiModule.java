@@ -42,4 +42,11 @@ public class ApiModule {
     public OrderApi orderApi() {
         return retrofit().create(OrderApi.class);
     }
+
+    @Provides
+    public AuthApi authApi() {
+        return retrofit().create(AuthApi.class);
+
+    }
+
 }
