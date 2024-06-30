@@ -58,21 +58,17 @@ public class ProductDetailViewModel extends ViewModel {
         }, id);
     }
 
-    public void addProduct(ProductModel product, List<Integer> selectedOptions) {
-        Integer totalPrice = 0;
+    public void addProduct(ProductModel product, int selectedPosition) {
 
         // Iterate through the selected options and sum their prices
-        for (int i = 0; i < selectedOptions.size(); i++) {
-            int key = selectedOptions.get(i);
-            ProductOptionalModel option = product.getProductOpts().get(key);
-            totalPrice += option.getPrice();
-        }
+
+        ProductOptionalModel option = product.getProductOpts().get(selectedPosition);
 
         CartItemEntity cartItemEntity = CartItemEntity.builder()
-                .id(product.getId())
-                .name(product.getName())
-                .price(totalPrice)
-                .quantity(selectedOptions.size())
+                .id(option.getId())
+                .name(option.getName())
+                .price(option.getPrice())
+                .quantity(1)
                 .build();
 
         new Thread(() -> {

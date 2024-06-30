@@ -56,14 +56,10 @@ public class LoginActivity extends AppCompatActivity {
     private boolean showOneTapUI = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        System.out.println("Haloooo");
 
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
-
-        System.out.println("Haloooo");
-
         // google sign in setup
         // Initialize sign in options the client-id is copied form google-services.json file
         GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)

@@ -1,27 +1,13 @@
 package com.example.s_store.ui.products;
 
-import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.example.s_store.R;
 import com.example.s_store.common.models.CategoryModel;
-import com.example.s_store.common.models.ProductModel;
 import com.example.s_store.products.controller.CategoryController;
 
-import java.text.NumberFormat;
 import java.util.List;
-import java.util.Locale;
 
 import javax.inject.Inject;
 

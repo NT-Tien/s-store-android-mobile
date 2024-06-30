@@ -37,4 +37,11 @@ public class ApiModule {
     public CategoryApi categoryApi() {
         return retrofit().create(CategoryApi.class);
     }
+
+    @Provides
+    public AuthApi authApi() {
+        return retrofit().create(AuthApi.class);
+
+    }
+
 }

@@ -6,4 +6,8 @@ import dagger.hilt.android.HiltAndroidApp;
 
 @HiltAndroidApp
 public class MainApplication extends Application {
+    private static MainApplication instance;
+    public static MainApplication getInstance() {
+        return instance;
+    }
 }
