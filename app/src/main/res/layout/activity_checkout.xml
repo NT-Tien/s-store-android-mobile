@@ -37,32 +37,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        android:id="@+id/input_email_container"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                            android:hint="Email"
-                            android:id="@+id/input_email"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
                 <LinearLayout
                         android:baselineAligned="false"
-                        android:layout_marginTop="5dp"
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        app:layout_constraintTop_toBottomOf="@id/input_email_container"
                         android:weightSum="100"
                         android:gravity="fill"
-                        app:layout_constraintStart_toStartOf="parent">
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent">
 
                     <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="0dp"
@@ -198,16 +183,17 @@
                 android:text="Total: 100USD"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/textView3"
+                android:id="@+id/total"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                android:textAlignment="textEnd" />
 
         <Button
                 android:text="Proceed to Payment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/btn_checkout"
-                app:layout_constraintTop_toBottomOf="@+id/textView3"
+                app:layout_constraintTop_toBottomOf="@+id/total"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent" />

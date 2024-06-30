@@ -1,5 +1,6 @@
 package com.example.s_store.di.order;
 
+import com.example.s_store.common.exceptions.CreateOrderException;
 import com.example.s_store.common.models.OrderModel;
 import com.example.s_store.di.api.OrderApi;
 import com.example.s_store.di.api.dto.OrderRequestDto;
@@ -25,10 +26,11 @@ public class OrderService {
         this.orderApi = orderApi;
     }
 
-    public void createOrder(OrderRequestDto.CreateOrder dto, String token) {
-        System.out.println("RESULT" + dto.getAddress() + dto.getAddress() + dto.getPhone() + dto.getEmail() + dto.getUser() + dto.getItems() + dto.getUsername() + dto.getTotal());
+    public OrderResponseDto.GetResult.OrderData createOrder(OrderRequestDto.CreateOrder dto, String token) throws CreateOrderException {
+        Call<OrderResponseDto.CreateOrder> createOrder = this.orderApi.createOrder("Bearer " + token, dto);
+        System.out.println("START REQUEST");
+
         try {
-            Call<OrderResponseDto.CreateOrder> createOrder = this.orderApi.createOrder("Bearer " + token, dto);
             // create order
             Response<OrderResponseDto.CreateOrder> v = createOrder.execute();
             if (!v.isSuccessful()) {
@@ -47,9 +49,8 @@ public class OrderService {
 
             System.out.println("FIRST REQUEST DONE");
 
-            Thread.sleep(3000);
+            Thread.sleep(5000);
 
-            // get order result
             Call<OrderResponseDto.GetResult> getOrderResult = this.orderApi.getOrderResult("Bearer " + token, orderId);
             Response<OrderResponseDto.GetResult> v2 = getOrderResult.execute();
 
@@ -68,21 +69,26 @@ public class OrderService {
             }
 
             JsonElement returnvalue = body2.getReturnvalue();
-            if(returnvalue.isJsonObject()) {
+            if (returnvalue.isJsonObject()) {
                 System.out.println("RETURNVSALYUE");
-                System.out.println(returnvalue.getAsString());
                 OrderResponseDto.GetResult.OrderData value = new Gson().fromJson(returnvalue, OrderResponseDto.GetResult.OrderData.class);
-                System.out.println("ORDER SUCCESS: " + value.getUser());
+                System.out.println("ORDER SUCCESS: " + value.getUsername());
+                return value;
             } else if (returnvalue.isJsonPrimitive()) {
                 String value = returnvalue.getAsString();
-                System.out.println("ORDER FAILED: " + value);
+                System.out.println("ERROR");
+                System.out.println(value);
+                throw new CreateOrderException(value);
+            } else {
+                throw new IOException("Failed to get order result");
             }
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
-            e.printStackTrace();
             throw new RuntimeException(e);
         }
+
+        return null;
     }
 
     public List<OrderModel> getOrders(String token) {
@@ -99,3 +105,4 @@ public class OrderService {
         }
     }
 }
+

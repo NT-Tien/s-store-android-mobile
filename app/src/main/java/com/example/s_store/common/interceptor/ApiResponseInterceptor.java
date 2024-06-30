@@ -19,11 +19,16 @@ public class ApiResponseInterceptor implements Interceptor {
 
     @Override
     public Response intercept(@NonNull Chain chain) throws IOException {
-        try (Response originalResponse = chain.proceed(chain.request()); ResponseBody body = originalResponse.body()) {
-            if (body != null && body.contentType() != null && Objects.requireNonNull(body.contentType()).subtype().equalsIgnoreCase(("json"))) {
-                String bodyString = body.string();
+        System.out.println("In interceptor here");
+        try {
+            Response originalResponse = chain.proceed(chain.request());
+            ResponseBody body = originalResponse.body();
+            if (body != null) {
+                System.out.println("Has body");
+                String bodyString = originalResponse.peekBody(Long.MAX_VALUE).string();
+                System.out.println(bodyString);
                 if(bodyString.contains("\"error\":")) {
-                    return originalResponse;
+                    throw new RuntimeException("Response contained error");
                 }
                 ApiSuccessResponseModel<?> apiResponse = gson.fromJson(bodyString, new TypeToken<ApiSuccessResponseModel<?>>() {
                 }.getType());
@@ -33,7 +38,7 @@ public class ApiResponseInterceptor implements Interceptor {
             }
         } catch (NullPointerException | JsonSyntaxException e) {
             e.printStackTrace();
-            return chain.proceed(chain.request());
+            throw new RuntimeException("Failed to parse response");
         }
         return chain.proceed(chain.request());
     }
