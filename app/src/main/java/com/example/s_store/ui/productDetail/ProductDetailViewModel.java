@@ -1,7 +1,5 @@
 package com.example.s_store.ui.productDetail;
 
-import android.util.SparseBooleanArray;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -9,19 +7,12 @@ import androidx.lifecycle.ViewModel;
 import com.example.s_store.common.entities.CartItemEntity;
 import com.example.s_store.common.models.ProductModel;
 import com.example.s_store.common.models.ProductOptionalModel;
-import com.example.s_store.di.api.ProductApi;
 import com.example.s_store.di.cart.CartService;
 import com.example.s_store.products.controller.ProductController;
-
-import java.util.List;
-import java.util.Random;
 
 import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 @HiltViewModel
 public class ProductDetailViewModel extends ViewModel {
@@ -58,30 +49,17 @@ public class ProductDetailViewModel extends ViewModel {
         }, id);
     }
 
-    public void addProduct(ProductModel product, List<Integer> selectedOptions) {
-        Double totalPrice = 0d;
-
+    public void addProduct(ProductModel product, int selectedPosition) {
         // Iterate through the selected options and sum their prices
-        for (int i = 0; i < selectedOptions.size(); i++) {
-            int key = selectedOptions.get(i);
-            ProductOptionalModel option = product.getProductOpts().get(key);
-            totalPrice += option.getPrice();
-        }
-
-//        CartItemEntity cartItemEntity = CartItemEntity.builder()
-//                .id(product.getId())
-//                .name(product.getName())
-//                .price(totalPrice)
-//                .quantity(selectedOptions.size())
-//                .build();
+        ProductOptionalModel option = product.getProductOpts().get(selectedPosition);
 
         CartItemEntity cartItemEntity = CartItemEntity.builder()
-                .id(product.getProductOpts().get(0).getId())
-                .name(product.getProductOpts().get(0).getName())
-                .price(product.getProductOpts().get(0).getPrice())
-                .quantity(1)
-                .image(product.getProductOpts().get(0).getImage())
+                .id(option.getId())
+                .name(option.getName())
+                .price(option.getPrice())
                 .productName(product.getName())
+                .image(option.getImage())
+                .quantity(1)
                 .build();
 
         new Thread(() -> {

@@ -1,6 +1,5 @@
 package com.example.s_store.ui.products;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,13 +15,11 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.s_store.R;
 import com.example.s_store.common.models.CategoryModel;
 import com.example.s_store.common.models.ProductModel;
 import com.example.s_store.databinding.FragmentProductsBinding;
 import com.example.s_store.products.controller.CategoryController;
 import com.example.s_store.products.controller.ProductController;
-import com.example.s_store.ui.productDetail.ProductDetailFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -105,10 +102,6 @@ public class ProductsFragment extends Fragment implements ProductAdapter.OnProdu
 
     @Override
     public void onProductClick(ProductModel product, int position) {
-        // Navigate to product detail activity with product ID
-//        Bundle bundle = new Bundle();
-//        bundle.putString("productId", product.getId());
-//        Navigation.findNavController(requireView()).navigate(R.id.action_productsFragment_to_productDetailFragment, bundle);
         NavDirections action = ProductsFragmentDirections.actionProductsFragmentToProductDetailFragment(product.getId());
         Navigation.findNavController(requireView()).navigate(action);
     }
