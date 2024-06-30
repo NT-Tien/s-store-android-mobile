@@ -59,7 +59,7 @@ public class ProductDetailViewModel extends ViewModel {
     }
 
     public void addProduct(ProductModel product, List<Integer> selectedOptions) {
-        Integer totalPrice = 0;
+        Double totalPrice = 0d;
 
         // Iterate through the selected options and sum their prices
         for (int i = 0; i < selectedOptions.size(); i++) {
