@@ -21,12 +21,17 @@ public class ProductController {
         this.productApi = productApi;
     }
 
-    public interface ProductFetchListener {
+    public interface ProductsFetchListener {
         void onProductsFetched(List<ProductModel> products);
         void onFetchFailed(String errorMessage);
     }
 
-    public void getAllProducts(ProductFetchListener listener) {
+    public interface ProductFetchListener {
+        void onProductFetched(ProductModel product);
+        void onFetchFailed(String errorMessage);
+    }
+
+    public void getAllProducts(ProductsFetchListener listener) {
         Call<List<ProductModel>> call = productApi.all();
         call.enqueue(new Callback<List<ProductModel>>() {
             @Override
@@ -41,6 +46,26 @@ public class ProductController {
 
             @Override
             public void onFailure(Call<List<ProductModel>> call, Throwable t) {
+                listener.onFetchFailed("Network Error: " + t.getMessage());
+            }
+        });
+    }
+
+    public void getProductById(ProductFetchListener listener, String id) {
+        Call<ProductModel> call = productApi.one(id);
+        call.enqueue(new Callback<ProductModel>() {
+            @Override
+            public void onResponse(Call<ProductModel> call, Response<ProductModel> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    ProductModel product = response.body();
+                    listener.onProductFetched(product);
+                } else {
+                    listener.onFetchFailed("Failed to fetch product");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ProductModel> call, Throwable t) {
                 listener.onFetchFailed("Network Error: " + t.getMessage());
             }
         });

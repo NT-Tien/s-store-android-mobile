@@ -1,11 +1,10 @@
-package com.example.s_store.products.ui;
+package com.example.s_store.ui.products;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,17 +17,18 @@ import com.example.s_store.common.models.ProductModel;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
-import java.util.function.Function;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
+
+    // Define interface for handling click events
+    public interface OnProductClickListener {
+        void onProductClick(ProductModel product, int position);
+    }
     private List<ProductModel> products;
-    private Context context;
-    private Function<ProductModel, Void> onProductClick;
-
-
-    public ProductAdapter(List<ProductModel> products, Function<ProductModel, Void> onProductClick) {
+    private OnProductClickListener onProductClickListener;
+    public ProductAdapter(List<ProductModel> products, OnProductClickListener onProductClickListener) {
         this.products = products;
-        this.onProductClick = onProductClick;
+        this.onProductClickListener = onProductClickListener;
     }
 
     @NonNull
@@ -44,26 +44,24 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         holder.name.setText(product.getName());
         holder.description.setText(product.getDescription());
 
-        NumberFormat numberFormat = NumberFormat.getInstance(Locale.US);
-        String formattedPrice = numberFormat.format(product.getProductOpts().get(0).getPrice()) + " VND";
-        holder.price.setText(formattedPrice);
-        holder.productLayout.setOnClickListener(v -> onProductClick.apply(product));
+        if (!product.getProductOpts().isEmpty()) {
+            NumberFormat numberFormat = NumberFormat.getInstance(Locale.US);
+            String formattedPrice = numberFormat.format(product.getProductOpts().get(0).getPrice()) + " VND";
+            holder.price.setText(formattedPrice);
+        } else {
+            holder.price.setText("N/A");
+        }
 
         String baseUrl = "https://s-api.caucalamdev.io.vn/file/image/";
         Glide.with(holder.itemView.getContext())
                 .load(baseUrl + product.getImage())
                 .into(holder.image);
 
-        // Set OnClickListener for productName to open ProductDetailActivity
-//        holder.name.setOnClickListener(v -> {
-//            Intent intent = new Intent(context, ProductDetailActivity.class);
-//            intent.putExtra("name", product.getName());
-//            intent.putExtra("description", product.getDescription());
-//            intent.putExtra("price", product.getPrice());
-//            intent.putExtra("status", product.getStatus());
-//            intent.putExtra("imageUrl", product.getImageUrl());
-//            context.startActivity(intent);
-//        });
+        holder.itemView.setOnClickListener(view -> {
+            if (onProductClickListener != null) {
+                onProductClickListener.onProductClick(product, position);
+            }
+        });
     }
 
     @Override

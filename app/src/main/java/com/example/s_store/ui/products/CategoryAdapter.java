@@ -1,4 +1,4 @@
-package com.example.s_store.products.ui;
+package com.example.s_store.ui.products;
 
 import android.view.LayoutInflater;
 import android.view.View;

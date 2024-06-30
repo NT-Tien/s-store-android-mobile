@@ -1,5 +1,6 @@
 package com.example.s_store.ui.products;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,20 +9,20 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.s_store.R;
-import com.example.s_store.common.entities.CartItemEntity;
 import com.example.s_store.common.models.CategoryModel;
 import com.example.s_store.common.models.ProductModel;
 import com.example.s_store.databinding.FragmentProductsBinding;
-import com.example.s_store.di.cart.CartService;
 import com.example.s_store.products.controller.CategoryController;
 import com.example.s_store.products.controller.ProductController;
-import com.example.s_store.products.ui.ProductAdapter;
-import com.example.s_store.products.ui.CategoryAdapter;
+import com.example.s_store.ui.productDetail.ProductDetailFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,17 +32,16 @@ import javax.inject.Inject;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class ProductsFragment extends Fragment {
+public class ProductsFragment extends Fragment implements ProductAdapter.OnProductClickListener {
     @Inject
     ProductController productController;
 
     @Inject
     CategoryController categoryController;
 
-    @Inject
-    CartService cartService;
-
     private FragmentProductsBinding binding;
+    private ProductsViewModel productsViewModel;
+    private CategoriesViewModel categoriesViewModel;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -54,61 +54,45 @@ public class ProductsFragment extends Fragment {
         categoryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         productRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
 
+        // Initialize ViewModel
+        productsViewModel = new ViewModelProvider(this).get(ProductsViewModel.class);
+        categoriesViewModel = new ViewModelProvider(this).get(CategoriesViewModel.class);
+
         List<CategoryModel> categories = new ArrayList<>();
         CategoryAdapter categoryAdapter = new CategoryAdapter(categories);
         categoryRecyclerView.setAdapter(categoryAdapter);
 
-        // Fetch categories using CategoryFetcher
-        categoryController.getAllCategories(new CategoryController.CategoryFetchListener() {
-            @Override
-            public void onCategoriesFetched(List<CategoryModel> responseData) {
-                categories.clear();
-                categories.addAll(responseData);
-                categoryAdapter.notifyDataSetChanged();
-            }
+        // Observe categories LiveData
+        categoriesViewModel.getCategories().observe(getViewLifecycleOwner(), responseData -> {
+            categories.clear();
+            categories.addAll(responseData);
+            categoryAdapter.notifyDataSetChanged();
+        });
 
-            @Override
-            public void onFetchFailed(String errorMessage) {
+        // Observe error messages
+        categoriesViewModel.getErrorMessage().observe(getViewLifecycleOwner(), errorMessage -> {
+            if (errorMessage != null) {
                 Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show();
             }
         });
 
         List<ProductModel> products = new ArrayList<>();
-        ProductAdapter productAdapter = new ProductAdapter(products, product -> {
-            new Thread(() -> {
-                cartService.addProduct(CartItemEntity.builder()
-                        .id(product.getProductOpts().get(0).getId())
-                        .name(product.getProductOpts().get(0).getName())
-                        .price(product.getProductOpts().get(0).getPrice())
-                        .quantity(1)
-                        .productName(product.getName())
-                        .image(product.getProductOpts().get(0).getImage())
-                        .build()
-                );
-
-                requireActivity().runOnUiThread(() -> {
-                    Toast.makeText(requireContext(), "Added to cart", Toast.LENGTH_SHORT).show();
-                });
-            }).start();
-            return null;
-        });
+        ProductAdapter productAdapter = new ProductAdapter(products, this);
         productRecyclerView.setAdapter(productAdapter);
 
-        // Fetch products
-        productController.getAllProducts(new ProductController.ProductFetchListener() {
-            @Override
-            public void onProductsFetched(List<ProductModel> responseData) {
-                products.clear();
-                products.addAll(responseData);
-                productAdapter.notifyDataSetChanged();
-            }
+        // Observe products LiveData
+        productsViewModel.getProducts().observe(getViewLifecycleOwner(), responseData -> {
+            products.clear();
+            products.addAll(responseData);
+            productAdapter.notifyDataSetChanged();
+        });
 
-            @Override
-            public void onFetchFailed(String errorMessage) {
+        // Observe error messages
+        productsViewModel.getErrorMessage().observe(getViewLifecycleOwner(), errorMessage -> {
+            if (errorMessage != null) {
                 Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show();
             }
         });
-
 
         return root;
     }
@@ -117,6 +101,16 @@ public class ProductsFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    @Override
+    public void onProductClick(ProductModel product, int position) {
+        // Navigate to product detail activity with product ID
+//        Bundle bundle = new Bundle();
+//        bundle.putString("productId", product.getId());
+//        Navigation.findNavController(requireView()).navigate(R.id.action_productsFragment_to_productDetailFragment, bundle);
+        NavDirections action = ProductsFragmentDirections.actionProductsFragmentToProductDetailFragment(product.getId());
+        Navigation.findNavController(requireView()).navigate(action);
     }
 }
 
