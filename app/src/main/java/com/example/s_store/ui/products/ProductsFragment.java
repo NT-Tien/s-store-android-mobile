@@ -13,9 +13,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.s_store.R;
+import com.example.s_store.common.entities.CartItemEntity;
 import com.example.s_store.common.models.CategoryModel;
 import com.example.s_store.common.models.ProductModel;
 import com.example.s_store.databinding.FragmentProductsBinding;
+import com.example.s_store.di.cart.CartService;
 import com.example.s_store.products.controller.CategoryController;
 import com.example.s_store.products.controller.ProductController;
 import com.example.s_store.products.ui.ProductAdapter;
@@ -35,6 +37,9 @@ public class ProductsFragment extends Fragment {
 
     @Inject
     CategoryController categoryController;
+
+    @Inject
+    CartService cartService;
 
     private FragmentProductsBinding binding;
 
@@ -69,7 +74,24 @@ public class ProductsFragment extends Fragment {
         });
 
         List<ProductModel> products = new ArrayList<>();
-        ProductAdapter productAdapter = new ProductAdapter(products);
+        ProductAdapter productAdapter = new ProductAdapter(products, product -> {
+            new Thread(() -> {
+                cartService.addProduct(CartItemEntity.builder()
+                        .id(product.getProductOpts().get(0).getId())
+                        .name(product.getProductOpts().get(0).getName())
+                        .price(product.getProductOpts().get(0).getPrice())
+                        .quantity(1)
+                        .productName(product.getName())
+                        .image(product.getProductOpts().get(0).getImage())
+                        .build()
+                );
+
+                requireActivity().runOnUiThread(() -> {
+                    Toast.makeText(requireContext(), "Added to cart", Toast.LENGTH_SHORT).show();
+                });
+            }).start();
+            return null;
+        });
         productRecyclerView.setAdapter(productAdapter);
 
         // Fetch products

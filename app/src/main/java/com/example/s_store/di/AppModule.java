@@ -26,8 +26,21 @@ public class AppModule {
     @Singleton
     public AppDatabase provideAppDatabase(@ApplicationContext Context ctx) {
         return Room.databaseBuilder(ctx, AppDatabase.class, "app-main-db")
-                .setQueryExecutor(Executors.newSingleThreadExecutor())
+//                .setQueryExecutor(Executors.newSingleThreadExecutor())
+                .addMigrations(new Migration(1, 2) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase supportSQLiteDatabase) {
+
+                    }
+                })
+                .addMigrations(new Migration(2, 3) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase supportSQLiteDatabase) {
+                        supportSQLiteDatabase.execSQL("ALTER TABLE cart_items ");
+                    }
+                })
                 .fallbackToDestructiveMigration() // clear database when version is changed
+                .fallbackToDestructiveMigrationOnDowngrade() // clear database when version is downgraded
                 .build();
     }
 }

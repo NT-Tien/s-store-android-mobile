@@ -90,4 +90,8 @@ dependencies {
 //    UI
     implementation("androidx.cardview:cardview:1.0.0")
 
+//    Picasso
+    implementation("com.squareup.picasso:picasso:2.8")
+
+
 }

@@ -15,7 +15,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class ProductOptionalModel extends BaseModel implements Serializable {
     private String name;
-    private Integer price;
+    private Double price;
     private Integer quantity;
     private String image;
 }

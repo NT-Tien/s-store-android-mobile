@@ -1,11 +1,16 @@
 package com.example.s_store.ui.checkout;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.s_store.auth.network.TokenManager;
 import com.example.s_store.common.entities.CartItemEntity;
+import com.example.s_store.common.util.DecodeJwt;
 import com.example.s_store.databinding.ActivityCheckoutBinding;
 import com.example.s_store.di.api.dto.OrderRequestDto;
 import com.example.s_store.di.cart.CartService;
@@ -19,12 +24,15 @@ import javax.inject.Inject;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class CheckoutActivity extends AppCompatActivity {
+public class CheckoutActivity extends AppCompatActivity implements View.OnClickListener {
 
-    @Inject OrderService orderService;
-    @Inject CartService cartService;
+    @Inject
+    OrderService orderService;
+    @Inject
+    CartService cartService;
 
     private ActivityCheckoutBinding binding;
+    private TokenManager tokenManager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -32,30 +40,61 @@ public class CheckoutActivity extends AppCompatActivity {
         this.binding = ActivityCheckoutBinding.inflate(this.getLayoutInflater());
         this.setContentView(this.binding.getRoot());
         this.setTitle("Checkout");
+        tokenManager = new TokenManager(this);
 
-        this.binding.btnCheckout.setOnClickListener(v -> {
-            String phone = Objects.requireNonNull(binding.inputPhone.getText()).toString();
-            String email = Objects.requireNonNull(binding.inputEmail.getText()).toString();
-            String name = Objects.requireNonNull(binding.inputName.getText()).toString();
-            String addressLine = Objects.requireNonNull(binding.inputAddressLine.getText()).toString();
-            String city = Objects.requireNonNull(binding.inputCity.getText()).toString();
-            String province = Objects.requireNonNull(binding.inputProvince.getText()).toString();
+        this.binding.btnCheckout.setOnClickListener(this);
+    }
 
-            OrderRequestDto.CreateOrder.CreateOrderBuilder dto = OrderRequestDto.CreateOrder.builder()
-                    .user("") // TODO get user from context
-                    .phone(phone)
-                    .email(email)
-                    .username(name)
-                    .address(addressLine + ", " + city + ", " + province)
-                    .voucher(null);
+    @Override
+    public void onClick(View v) {
+        Editable phone = binding.inputPhone.getText();
+        Editable email = binding.inputEmail.getText();
+        Editable name = binding.inputName.getText();
+        Editable addressLine = binding.inputAddressLine.getText();
+        Editable city = binding.inputCity.getText();
+        Editable province = binding.inputProvince.getText();
+        String token = tokenManager.getToken();
+        String uid = DecodeJwt.decode(token, "id");
 
-            new Thread(() -> {
-                Double total = this.cartService.total();
-                dto.total(total);
-                List<CartItemEntity> items = this.cartService.getAll();
-                dto.items(items);
-                this.orderService.createOrder(dto.build());
-            }).start();
-        });
+        if(phone == null || email == null || name == null || addressLine == null || city == null || province == null) {
+            Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+//            this.binding.btnCheckout.setEnabled(false);
+            return;
+        }
+
+        if(phone.toString().isEmpty() || email.toString().isEmpty() || name.toString().isEmpty() || addressLine.toString().isEmpty() || city.toString().isEmpty() || province.toString().isEmpty()) {
+            Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+//            this.binding.btnCheckout.setEnabled(false);
+            return;
+        }
+
+//        if(email.toString().matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+//            Toast.makeText(this, "Invalid email", Toast.LENGTH_SHORT).show();
+////            this.binding.btnCheckout.setEnabled(false);
+//            return;
+//        }
+//
+//        if(phone.toString().matches("^(\\+62|0)8[0-9]{8,}$")) {
+//            Toast.makeText(this, "Phone number must start with +84", Toast.LENGTH_SHORT).show();
+////            this.binding.btnCheckout.setEnabled(false);
+//            return;
+//        }
+
+//        this.binding.btnCheckout.setEnabled(true);
+
+        OrderRequestDto.CreateOrder.CreateOrderBuilder dto = OrderRequestDto.CreateOrder.builder()
+                .user(uid)
+                .phone(phone.toString())
+                .email(email.toString())
+                .username(name.toString())
+                .address(addressLine + ", " + city + ", " + province)
+                .voucher(null);
+
+        new Thread(() -> {
+            List<CartItemEntity> items = this.cartService.getAll();
+            dto.items(items);
+            dto.total(items.stream().reduce(0d, (subtotal, item) -> subtotal + (item.getPrice() * item.getQuantity()), Double::sum));
+            this.orderService.createOrder(dto.build(), tokenManager.getToken());
+        }).start();
     }
 }

@@ -8,7 +8,6 @@ import com.example.s_store.di.cart.CartService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import javax.inject.Inject;
 
@@ -27,24 +26,6 @@ public class CartViewModel extends ViewModel {
     @Getter
     private final MutableLiveData<List<CartItemEntity>> cartItemsLiveData = new MutableLiveData<>(new ArrayList<>());
 
-    public void addProduct() {
-        CartItemEntity cartItemEntity = CartItemEntity.builder()
-                .id(String.valueOf(new Random().nextInt()))
-                .name(String.valueOf(new Random().nextInt()))
-                .price(new Random().nextInt())
-                .quantity(new Random().nextInt())
-                .build();
-
-        new Thread(() -> {
-            this.cartService.addProduct(cartItemEntity);
-            List<CartItemEntity> cartItems = this.cartItemsLiveData.getValue();
-            if (cartItems != null) {
-                cartItems.add(cartItemEntity);
-                this.cartItemsLiveData.postValue(cartItems);
-            }
-        }).start();
-    }
-
     public void reloadItems() {
         new Thread(() -> {
             this.cartItemsLiveData.postValue(this.cartService.getAll());
@@ -55,6 +36,22 @@ public class CartViewModel extends ViewModel {
         new Thread(() -> {
             this.cartService.clearAll();
             this.cartItemsLiveData.postValue(new ArrayList<>());
+        }).start();
+    }
+
+    public void updateProduct(CartItemEntity cartItemEntity) {
+        new Thread(() -> {
+            this.cartService.addProduct(cartItemEntity);
+            List<CartItemEntity> cartItems = this.cartItemsLiveData.getValue();
+            if (cartItems != null) {
+                for (int i = 0; i < cartItems.size(); i++) {
+                    if (cartItems.get(i).getId().equals(cartItemEntity.getId())) {
+                        cartItems.set(i, cartItemEntity);
+                        break;
+                    }
+                }
+                this.cartItemsLiveData.postValue(cartItems);
+            }
         }).start();
     }
 

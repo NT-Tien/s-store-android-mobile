@@ -29,6 +29,7 @@ public class ApiResponseInterceptor implements Interceptor {
                         .build();
             }
         } catch (NullPointerException | JsonSyntaxException e) {
+            e.printStackTrace();
             return null;
         }
         return chain.proceed(chain.request());

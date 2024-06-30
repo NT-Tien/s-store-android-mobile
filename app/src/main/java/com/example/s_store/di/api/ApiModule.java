@@ -13,7 +13,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @Module
 @InstallIn(SingletonComponent.class)
 public class ApiModule {
-    private static final String BASE_URL = "https://s-api.caucalamdev.io.vn";
+    public static final String BASE_URL = "https://s-api.caucalamdev.io.vn";
 
     @Provides
     public Retrofit retrofit() {

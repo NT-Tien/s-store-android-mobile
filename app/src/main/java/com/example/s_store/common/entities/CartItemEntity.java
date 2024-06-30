@@ -23,6 +23,8 @@ public class CartItemEntity implements Serializable {
     public String id;
     private String name;
     private Integer quantity;
-    private Integer price;
+    private Double price;
+    private String image;
+    private String productName;
     private Long createdAt = System.currentTimeMillis();
 }

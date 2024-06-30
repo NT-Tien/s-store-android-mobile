@@ -1,10 +1,12 @@
 package com.example.s_store.di.order;
 
+import com.example.s_store.common.models.OrderModel;
 import com.example.s_store.di.api.OrderApi;
 import com.example.s_store.di.api.dto.OrderRequestDto;
 import com.example.s_store.di.api.dto.OrderResponseDto;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -14,54 +16,70 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class OrderService {
-    private OrderApi orderApi;
+    private final OrderApi orderApi;
 
     @Inject
     public OrderService(OrderApi orderApi) {
         this.orderApi = orderApi;
     }
 
-    public void createOrder(OrderRequestDto.CreateOrder dto) {
-        Call<OrderResponseDto.CreateOrder> createOrder = this.orderApi.createOrder("", dto);
+    public void createOrder(OrderRequestDto.CreateOrder dto, String token) {
+        System.out.println("RESULT" + dto.toString());
         try {
+            Call<OrderResponseDto.CreateOrder> createOrder = this.orderApi.createOrder("Bearer " + token, dto);
             // create order
             Response<OrderResponseDto.CreateOrder> v = createOrder.execute();
-            if(!v.isSuccessful()) {
+            if (!v.isSuccessful()) {
                 throw new IOException("Failed to create order");
             }
             OrderResponseDto.CreateOrder body = v.body();
-            if(body == null) {
+            if (body == null) {
                 throw new IOException("Failed to create order");
             }
 
             Thread.sleep(3000);
 
             String orderId = body.getId();
-            if(orderId == null) {
+            if (orderId == null) {
                 throw new IOException("Failed to create order");
             }
 
             // get order result
-            Call<OrderResponseDto.GetResult> getOrderResult = this.orderApi.getOrderResult("", orderId);
+            Call<OrderResponseDto.GetResult> getOrderResult = this.orderApi.getOrderResult("Bearer " + token, orderId);
             Response<OrderResponseDto.GetResult> v2 = getOrderResult.execute();
 
-            if(!v2.isSuccessful()) {
+            if (!v2.isSuccessful()) {
                 throw new IOException("Failed to get order result");
             }
 
             OrderResponseDto.GetResult body2 = v2.body();
 
-            if(body2 == null) {
+            if (body2 == null) {
                 throw new IOException("Failed to get order result");
             }
 
-            if((Object) body2.getReturnvalue() instanceof String) {
+            if ((Object) body2.getReturnvalue() instanceof String) {
                 throw new IOException("Failed to get order result");
             }
-        } catch(IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
+        }
+    }
+
+    public List<OrderModel> getOrders(String token) {
+        Call<List<OrderModel>> orders = this.orderApi.getOrders("Bearer " + token);
+        try {
+            Response<List<OrderModel>> v = orders.execute();
+            if (!v.isSuccessful()) {
+                throw new IOException("Failed to get orders");
+            }
+            return v.body();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }

@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,14 +18,17 @@ import com.example.s_store.common.models.ProductModel;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Function;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
     private List<ProductModel> products;
     private Context context;
+    private Function<ProductModel, Void> onProductClick;
 
 
-    public ProductAdapter(List<ProductModel> products) {
+    public ProductAdapter(List<ProductModel> products, Function<ProductModel, Void> onProductClick) {
         this.products = products;
+        this.onProductClick = onProductClick;
     }
 
     @NonNull
@@ -43,6 +47,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         NumberFormat numberFormat = NumberFormat.getInstance(Locale.US);
         String formattedPrice = numberFormat.format(product.getProductOpts().get(0).getPrice()) + " VND";
         holder.price.setText(formattedPrice);
+        holder.productLayout.setOnClickListener(v -> onProductClick.apply(product));
 
         String baseUrl = "https://s-api.caucalamdev.io.vn/file/image/";
         Glide.with(holder.itemView.getContext())
@@ -69,6 +74,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     public static class ProductViewHolder extends RecyclerView.ViewHolder {
         public TextView name, description, price, status;
         public ImageView image;
+        public LinearLayout productLayout;
 
         public ProductViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -77,6 +83,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             price = itemView.findViewById(R.id.productPrice);
             status = itemView.findViewById(R.id.productStatus);
             image = itemView.findViewById(R.id.productImage);
+            productLayout = itemView.findViewById(R.id.product_layout);
         }
     }
 }
