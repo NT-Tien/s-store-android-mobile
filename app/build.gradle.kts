@@ -3,6 +3,7 @@ plugins {
 
     id("com.google.gms.google-services")
     id("com.google.dagger.hilt.android")
+    id("androidx.navigation.safeargs")
 }
 
 android {

@@ -12,6 +12,6 @@ public interface ProductApi {
     @GET("/product/get-all-cache")
     Call<List<ProductModel>> all();
 
-    @GET("/product/{id}")
+    @GET("/product/cache/{id}")
     Call<ProductModel> one(@Path("id") String id);
 }
