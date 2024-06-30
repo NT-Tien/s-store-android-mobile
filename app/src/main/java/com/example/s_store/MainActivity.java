@@ -1,9 +1,11 @@
 package com.example.s_store;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -87,6 +89,10 @@ public class MainActivity extends AppCompatActivity {
         }).start();
         // Call API and update header
         fetchUserData();
+
+        // Logout button click listener
+        Button btnLogout = navigationView.getHeaderView(0).findViewById(R.id.btnLogout);
+        btnLogout.setOnClickListener(v -> logout());
     }
 
     @Override
@@ -132,5 +138,12 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Failed to fetch profile", Toast.LENGTH_SHORT).show();
             }
         }, "Bearer " + tokenManager.getToken());
+    }
+
+    private void logout() {
+        // Clear token and navigate to login screen
+        tokenManager.clearToken();
+        startActivity(new Intent(this, LoginActivity.class));
+        finish(); // Close MainActivity
     }
 }
