@@ -16,8 +16,8 @@ public class OrderModel {
     private String address;
     private int total;
     private String status;
-    private String appTransId;
-    private String zpTransId;
+    private String app_trans_id;
+    private String zp_trans_id;
     private Payment payment;
     private String note;
     private List<Item> items;
@@ -32,26 +32,26 @@ public class OrderModel {
             private String mac;
             private String item;
             private int amount;
-            private String appId;
-            private long appTime;
-            private String appUser;
-            private String bankCode;
-            private String embedData;
+            private String app_id;
+            private long app_time;
+            private String app_user;
+            private String bank_code;
+            private String embed_data;
             private String description;
-            private String appTransId;
-            private String callbackUrl;
+            private String app_trans_id;
+            private String callback_url;
         }
 
         @Getter
         public static class PaymentDetails {
-            private String qrCode;
-            private String orderUrl;
-            private String orderToken;
-            private int returnCode;
-            private String returnMessage;
-            private String zpTransToken;
-            private int subReturnCode;
-            private String subReturnMessage;
+            private String qr_code;
+            private String order_url;
+            private String order_token;
+            private int return_code;
+            private String return_message;
+            private String zp_trans_token;
+            private int sub_return_code;
+            private String sub_return_message;
         }
     }
 
